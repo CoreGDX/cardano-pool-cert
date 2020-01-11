@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  coregdx-jormungandr-poolcert:
+    build: .
+    container_name: coregdx-jormungandr-poolcert
+    image: coregdx/pool-cert:latest
+    env_file:
+      - ./pool.env
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        rm -rf pool_cert
+        mkdir pool_cert
+        jcli key generate --type=Curve25519_2HashDH > pool_cert/stake_pool_vrf.prv
+        cat pool_cert/stake_pool_vrf.prv | jcli key to-public > pool_cert/stake_pool_vrf.pub
+        jcli key generate --type=SumEd25519_12 > pool_cert/stake_pool_kes.prv
+        cat pool_cert/stake_pool_kes.prv | jcli key to-public > pool_cert/stake_pool_kes.pub
+        jcli certificate new stake-pool-registration --kes-key $$(cat pool_cert/stake_pool_kes.pub) --vrf-key $$(cat pool_cert/stake_pool_vrf.pub) --start-validity 0 --management-threshold 1 --tax-fixed $$POOL_TAX_FIXED --tax-limit $$POOL_TAX_LIMIT --tax-ratio $$POOL_TAX_RATIO --owner $$(cat owner_key/owner_key.pub) > pool_cert/stake_pool.cert
+        cat pool_cert/stake_pool.cert | jcli certificate get-stake-pool-id | tee stake_pool.id > pool_cert/pool_node_id.txt
+        tail -f /dev/null

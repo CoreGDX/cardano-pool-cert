@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  coregdx-jormungandr-ownerkey:
+    build: .
+    container_name: coregdx-jormungandr-ownerkey
+    image: coregdx/owner-key:latest
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        rm -rf owner_key
+        mkdir -p owner_key
+        jcli key generate --type=Ed25519 > owner_key/owner_key.prv
+        cat owner_key/owner_key.prv | jcli key to-public > owner_key/owner_key.pub
+        tail -f /dev/null
