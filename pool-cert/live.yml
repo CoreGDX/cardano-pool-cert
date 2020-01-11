@@ -1,4 +1,8 @@
-version: "2"
+version: "3.7"
 services:
-  jormungandr-cert:
+  jormungandr-alpine:
     build: .
+    container_name: coregdx/pool-cert
+    image: coregdx/pool-cert:latest
+    env_file:
+      - ./pool.env
