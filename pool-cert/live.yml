@@ -6,3 +6,8 @@ services:
     image: coregdx/pool-cert:latest
     env_file:
       - ./pool.env
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        echo "Hello World"
