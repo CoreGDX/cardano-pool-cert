@@ -1,4 +1,3 @@
 graphics/.DS_Store
-pool-cert/poolgen/
-
-pool-cert/poolkey/
+pool-cert/owner_key/
+pool-cert/pool_cert/
