@@ -10,7 +10,9 @@ services:
       - /bin/sh
       - -c
       - |
+        rm -rf stake_pool_vrf.prv stake_pool_vrf.pub stake_pool_kes.prv stake_pool_kes.pub
         jcli key generate --type=Curve25519_2HashDH > stake_pool_vrf.prv
         cat stake_pool_vrf.prv | jcli key to-public > stake_pool_vrf.pub
         jcli key generate --type=SumEd25519_12 > stake_pool_kes.prv
         cat stake_pool_kes.prv | jcli key to-public > stake_pool_kes.pub
+        tail -f /dev/null
