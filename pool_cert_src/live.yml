@@ -5,7 +5,7 @@ services:
     container_name: coregdx-jormungandr-poolcert
     image: coregdx/pool-cert:latest
     env_file:
-      - ./pool.env
+      - ./../pool.env
     command: 
       - /bin/sh
       - -c

@@ -6,4 +6,4 @@ WORKDIR /usr/cardano/jormungandr/bin
 
 # copy the pool owner keys from local into the container. This will
 # be needed for creating pool certs and signing them for submission
-ADD owner_key /usr/cardano/jormungandr/bin/owner_key
+ADD ./owner_key /usr/cardano/jormungandr/bin/owner_key
