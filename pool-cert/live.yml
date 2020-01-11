@@ -10,9 +10,12 @@ services:
       - /bin/sh
       - -c
       - |
-        rm -rf stake_pool_vrf.prv stake_pool_vrf.pub stake_pool_kes.prv stake_pool_kes.pub
-        jcli key generate --type=Curve25519_2HashDH > stake_pool_vrf.prv
-        cat stake_pool_vrf.prv | jcli key to-public > stake_pool_vrf.pub
-        jcli key generate --type=SumEd25519_12 > stake_pool_kes.prv
-        cat stake_pool_kes.prv | jcli key to-public > stake_pool_kes.pub
+        rm -rf poolgen
+        mkdir poolgen
+        jcli key generate --type=Curve25519_2HashDH > poolgen/stake_pool_vrf.prv
+        cat poolgen/stake_pool_vrf.prv | jcli key to-public > poolgen/stake_pool_vrf.pub
+        jcli key generate --type=SumEd25519_12 > poolgen/stake_pool_kes.prv
+        cat poolgen/stake_pool_kes.prv | jcli key to-public > poolgen/stake_pool_kes.pub
+        jcli certificate new stake-pool-registration --kes-key $$(cat poolgen/stake_pool_kes.pub) --vrf-key $$(cat poolgen/stake_pool_vrf.pub) --start-validity 0 --management-threshold 1 --tax-fixed $$POOL_TAX_FIXED --tax-limit $$POOL_TAX_LIMIT --tax-ratio $$POOL_TAX_RATIO --owner $$POOL_OWNER_PUBLIC_KEY > poolgen/stake_pool.cert
+        cat poolgen/stake_pool.cert | jcli certificate get-stake-pool-id | tee stake_pool.id > poolgen/node_id.txt
         tail -f /dev/null
