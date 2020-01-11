@@ -12,4 +12,5 @@ services:
         mkdir -p owner_key
         jcli key generate --type=Ed25519 > owner_key/owner_key.prv
         cat owner_key/owner_key.prv | jcli key to-public > owner_key/owner_key.pub
+        jcli address account --testing --prefix addr $$(cat owner_key/owner_key.pub) > owner_key/owner.addr
         tail -f /dev/null
