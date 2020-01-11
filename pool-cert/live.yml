@@ -1,8 +1,8 @@
 version: "3.7"
 services:
-  jormungandr-alpine:
+  coregdx-jormungandr-poolcert:
     build: .
-    container_name: coregdx/pool-cert
+    container_name: coregdx-jormungandr-poolcert
     image: coregdx/pool-cert:latest
     env_file:
       - ./pool.env
@@ -10,4 +10,7 @@ services:
       - /bin/sh
       - -c
       - |
-        echo "Hello World"
+        jcli key generate --type=Curve25519_2HashDH > stake_pool_vrf.prv
+        cat stake_pool_vrf.prv | jcli key to-public > stake_pool_vrf.pub
+        jcli key generate --type=SumEd25519_12 > stake_pool_kes.prv
+        cat stake_pool_kes.prv | jcli key to-public > stake_pool_kes.pub
